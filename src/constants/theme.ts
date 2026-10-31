@@ -7,6 +7,13 @@ import '@/global.css';
 
 import { Platform } from 'react-native';
 
+export const FontFamily = {
+  regular: 'NotoSansBengali_400',
+  medium: 'NotoSansBengali_500',
+  semibold: 'NotoSansBengali_600',
+  bold: 'NotoSansBengali_700',
+} as const;
+
 export const Colors = {
   light: {
     text: '#000000',
@@ -14,6 +21,7 @@ export const Colors = {
     backgroundElement: '#F0F0F3',
     backgroundSelected: '#E0E1E6',
     textSecondary: '#60646C',
+    accent: '#1F4D6E',
   },
   dark: {
     text: '#ffffff',
@@ -21,6 +29,7 @@ export const Colors = {
     backgroundElement: '#212225',
     backgroundSelected: '#2E3135',
     textSecondary: '#B0B4BA',
+    accent: '#9EC3DC',
   },
 } as const;
 
@@ -28,25 +37,21 @@ export type ThemeColor = keyof typeof Colors.light & keyof typeof Colors.dark;
 
 export const Fonts = Platform.select({
   ios: {
-    /** iOS `UIFontDescriptorSystemDesignDefault` */
-    sans: 'system-ui',
-    /** iOS `UIFontDescriptorSystemDesignSerif` */
+    sans: FontFamily.medium,
     serif: 'ui-serif',
-    /** iOS `UIFontDescriptorSystemDesignRounded` */
-    rounded: 'ui-rounded',
-    /** iOS `UIFontDescriptorSystemDesignMonospaced` */
+    rounded: FontFamily.medium,
     mono: 'ui-monospace',
   },
   default: {
-    sans: 'normal',
+    sans: FontFamily.medium,
     serif: 'serif',
-    rounded: 'normal',
+    rounded: FontFamily.medium,
     mono: 'monospace',
   },
   web: {
-    sans: 'var(--font-display)',
+    sans: FontFamily.medium,
     serif: 'var(--font-serif)',
-    rounded: 'var(--font-rounded)',
+    rounded: FontFamily.medium,
     mono: 'var(--font-mono)',
   },
 });
