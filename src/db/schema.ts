@@ -1,4 +1,4 @@
-export const DATABASE_VERSION = 1;
+export const DATABASE_VERSION = 2;
 
 export const SCHEMA_V1_SQL = `
 CREATE TABLE accounts (
@@ -159,4 +159,7 @@ CREATE TABLE app_settings (
 CREATE INDEX idx_transactions_occurred_at ON transactions (occurred_at);
 CREATE INDEX idx_transactions_account_id ON transactions (account_id);
 CREATE INDEX idx_transactions_category_id ON transactions (category_id);
+CREATE UNIQUE INDEX IF NOT EXISTS idx_transactions_rule_occurred
+  ON transactions (recurring_rule_id, occurred_at)
+  WHERE recurring_rule_id IS NOT NULL;
 `;

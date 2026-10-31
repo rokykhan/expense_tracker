@@ -1,5 +1,11 @@
 # Changelog
 
+## Phase 2
+
+- Home has one-tap shortcuts. A manage screen adds, edits, and reorders them.
+- Recurring rules can repeat daily, weekly, monthly, or yearly, with an optional end date.
+- Opening the app, or bringing it back, inserts each missed run once.
+
 ## Phase 1
 
 - Added account, category, and transaction screens, with archive, icon and color choices, and delete plus undo.

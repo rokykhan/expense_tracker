@@ -32,7 +32,7 @@ function mapTransaction(row: TransactionRow): TransactionRecord {
   return {
     id: row.id,
     kind: row.kind,
-    amount: row.amount,
+    amount: Number(row.amount),
     accountId: row.account_id,
     toAccountId: row.to_account_id,
     categoryId: row.category_id,

@@ -1,8 +1,11 @@
 import { useSQLiteContext } from 'expo-sqlite';
 import { createContext, useCallback, useContext, useEffect, useMemo, useState, type ReactNode } from 'react';
+import { Platform, Pressable, StyleSheet } from 'react-native';
 
+import { ThemedText } from '@/components/themed-text';
+import { ThemedView } from '@/components/themed-view';
 import { copy } from '@/constants/copy';
-import { EmptyScreen } from '@/components/empty-screen';
+import { Spacing } from '@/constants/theme';
 import {
   DEFAULT_CURRENCY_SYMBOL,
   SETTING_CURRENCY_SYMBOL,
@@ -37,7 +40,8 @@ export function SettingsProvider({ children }: { children: ReactNode }) {
           setSettings(next);
         }
       })
-      .catch(() => {
+      .catch((loadError: unknown) => {
+        console.error(loadError);
         if (!cancelled) {
           setError(copy.dbError);
         }
@@ -67,7 +71,21 @@ export function SettingsProvider({ children }: { children: ReactNode }) {
   );
 
   if (error) {
-    return <EmptyScreen title={copy.appName} message={error} />;
+    return (
+      <ThemedView style={styles.center}>
+        <ThemedText style={styles.message}>{error}</ThemedText>
+        <Pressable
+          accessibilityRole="button"
+          onPress={() => {
+            if (Platform.OS === 'web' && typeof window !== 'undefined') {
+              window.location.reload();
+            }
+          }}
+          style={styles.retry}>
+          <ThemedText type="smallBold">{copy.retry}</ThemedText>
+        </Pressable>
+      </ThemedView>
+    );
   }
 
   return <SettingsContext.Provider value={value}>{children}</SettingsContext.Provider>;
@@ -80,3 +98,20 @@ export function useSettings() {
   }
   return value;
 }
+
+const styles = StyleSheet.create({
+  center: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: Spacing.three,
+    paddingHorizontal: Spacing.four,
+  },
+  message: {
+    textAlign: 'center',
+  },
+  retry: {
+    paddingVertical: Spacing.two,
+    paddingHorizontal: Spacing.three,
+  },
+});

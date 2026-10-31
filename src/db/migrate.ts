@@ -13,11 +13,32 @@ export async function migrate(db: SQLiteDatabase): Promise<void> {
   }
 
   if (currentVersion === 0) {
-    await db.execAsync("PRAGMA journal_mode = 'wal';");
-    await db.withTransactionAsync(async () => {
-      await db.execAsync(SCHEMA_V1_SQL);
-      await insertSeed(db);
-    });
+    try {
+      await db.execAsync("PRAGMA journal_mode = 'wal';");
+    } catch {
+      // Web SQLite keeps the default journal mode. Android and iOS use WAL.
+    }
+    const existing = await db.getFirstAsync<{ name: string }>(
+      "SELECT name FROM sqlite_master WHERE type = 'table' AND name = 'accounts'",
+    );
+    if (!existing) {
+      const sql = SCHEMA_V1_SQL.replaceAll('CREATE TABLE ', 'CREATE TABLE IF NOT EXISTS ').replaceAll(
+        'CREATE INDEX ',
+        'CREATE INDEX IF NOT EXISTS ',
+      );
+      await db.withTransactionAsync(async () => {
+        await db.execAsync(sql);
+        await insertSeed(db);
+      });
+    }
+  }
+
+  if (currentVersion < 2) {
+    await db.execAsync(
+      `CREATE UNIQUE INDEX IF NOT EXISTS idx_transactions_rule_occurred
+       ON transactions (recurring_rule_id, occurred_at)
+       WHERE recurring_rule_id IS NOT NULL`,
+    );
   }
 
   await db.execAsync(`PRAGMA user_version = ${DATABASE_VERSION}`);

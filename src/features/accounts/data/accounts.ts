@@ -19,7 +19,7 @@ function mapAccount(row: AccountRow): AccountRecord {
     id: row.id,
     name: row.name,
     type: row.type,
-    initialBalance: row.initial_balance,
+    initialBalance: Number(row.initial_balance),
     icon: row.icon,
     color: row.color,
     isArchived: Number(row.is_archived) === 1,

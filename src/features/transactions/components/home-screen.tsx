@@ -11,16 +11,25 @@ import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
 import { copy } from '@/constants/copy';
 import { Spacing } from '@/constants/theme';
+import { QuickEntryBar } from '@/features/quick-entry/components/quick-entry-bar';
+import { listQuickEntries } from '@/features/quick-entry/data/quick-entries';
+import type { QuickEntryRecord } from '@/features/quick-entry/domain/types';
 import { UndoBanner } from '@/features/transactions/components/undo-banner';
 import { TransactionRow } from '@/features/transactions/components/transaction-row';
 import { useLedger } from '@/features/transactions/data/use-ledger';
 import { monthTotals, recentTransactions, totalBalance, transactionsInMonth } from '@/features/transactions/domain/ledger';
+import { useDbQuery } from '@/hooks/use-db-query';
+import { useRefresh } from '@/providers/refresh-provider';
 import { useSettings } from '@/providers/settings-provider';
 import { currentDhakaMonth } from '@/utils/date';
 import { openPath } from '@/utils/navigation';
 
+const EMPTY_SHORTCUTS: QuickEntryRecord[] = [];
+
 export function HomeScreen() {
   const ledger = useLedger();
+  const shortcuts = useDbQuery(listQuickEntries, EMPTY_SHORTCUTS);
+  const { processorError } = useRefresh();
   const { profileName } = useSettings();
   const [month, setMonth] = useState(() => currentDhakaMonth());
 
@@ -56,6 +65,8 @@ export function HomeScreen() {
           <SummaryLine label={copy.expense} paisa={-totals.expense} />
           <SummaryLine label={copy.savings} paisa={totals.savings} />
         </ThemedView>
+        {processorError ? <FormMessage message={processorError} /> : null}
+        <QuickEntryBar entries={shortcuts.data} error={shortcuts.error} onApplied={ledger.retry} />
         <View style={styles.heading}>
           <ThemedText type="smallBold">{copy.recent}</ThemedText>
           <TextButton label={copy.seeAll} onPress={() => openPath('/transactions')} />

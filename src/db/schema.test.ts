@@ -17,8 +17,8 @@ const TABLES = [
 ];
 
 describe('schema', () => {
-  it('starts at version 1 and stores money as integers', () => {
-    expect(DATABASE_VERSION).toBe(1);
+  it('tracks the schema version and stores money as integers', () => {
+    expect(DATABASE_VERSION).toBe(2);
     expect(SCHEMA_V1_SQL).not.toMatch(/\b(REAL|FLOAT|DOUBLE)\b/);
   });
 
@@ -29,5 +29,6 @@ describe('schema', () => {
     expect(SCHEMA_V1_SQL).toContain('idx_transactions_occurred_at');
     expect(SCHEMA_V1_SQL).toContain('idx_transactions_account_id');
     expect(SCHEMA_V1_SQL).toContain('idx_transactions_category_id');
+    expect(SCHEMA_V1_SQL).toContain('idx_transactions_rule_occurred');
   });
 });

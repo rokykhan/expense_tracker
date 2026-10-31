@@ -25,3 +25,10 @@
 - Deleting an entry asks on the form, then offers ফেরান until another entry is deleted. Undo writes the same row back.
 - The icon picker stores an SF Symbol name and shows a Bangla label.
 - List screens open `/accounts`, `/categories`, `/transactions`, and `/settings`. The generated type name `/accounts/index` would be caught by the `[id]` route.
+- On web the database opens only in the browser, after the page has loaded. WAL is best-effort there; a failed journal-mode change keeps the default mode. Retry reloads the page because a failed open stays cached until then.
+- Quick shortcuts are income or expense. The table has no destination account, and a category is required, so a transfer is not a shortcut.
+- A shortcut's amount is required, so one tap can post today's entry. Order is changed with উপরে and নিচে.
+- A new recurring rule's first run is its start date. Editing the start date does not move `next_run_date`, so entries already due are not skipped.
+- The day of the start date is kept for monthly and yearly rules. A short month uses its last day, then a later month can return to the original day.
+- Deleting a rule keeps the entries it already created and clears their rule link. A unique index on the rule and timestamp stops the same due date from being inserted twice.
+- Missed runs are filled when the app opens and when it returns to the foreground.
