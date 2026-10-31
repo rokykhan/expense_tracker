@@ -1,5 +1,11 @@
 # Changelog
 
+## Phase 3
+
+- The budget tab shows an overall monthly budget and one budget per expense category, with yellow and red progress.
+- Savings goals accept deposits and withdrawals and show a completed state.
+- Debts and receivables track partial payments, a settled state, and overdue items.
+
 ## Phase 2
 
 - Home has one-tap shortcuts. A manage screen adds, edits, and reorders them.

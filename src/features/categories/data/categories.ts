@@ -73,7 +73,9 @@ export async function categoryUsageCount(db: SQLiteDatabase, categoryId: number)
     `SELECT
        (SELECT COUNT(*) FROM transactions WHERE category_id = ?) +
        (SELECT COUNT(*) FROM recurring_rules WHERE category_id = ?) +
-       (SELECT COUNT(*) FROM quick_entries WHERE category_id = ?) AS count`,
+       (SELECT COUNT(*) FROM quick_entries WHERE category_id = ?) +
+       (SELECT COUNT(*) FROM budgets WHERE category_id = ?) AS count`,
+    categoryId,
     categoryId,
     categoryId,
     categoryId,

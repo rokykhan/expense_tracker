@@ -32,3 +32,12 @@
 - The day of the start date is kept for monthly and yearly rules. A short month uses its last day, then a later month can return to the original day.
 - Deleting a rule keeps the entries it already created and clears their rule link. A unique index on the rule and timestamp stops the same due date from being inserted twice.
 - Missed runs are filled when the app opens and when it returns to the foreground.
+
+## Phase 3
+
+- A budget is one row per month. A null category is the overall budget. Saving the same month and category updates that row.
+- Progress uses this month's expenses. Yellow starts at 80 percent, compared with integers (`spent * 5 >= limit * 4`). Red starts when spending reaches the limit. Copying last month skips rows that already exist.
+- A savings goal is complete when the deposits, minus withdrawals, reach the target. A withdrawal cannot exceed what is saved.
+- দেনা is `borrowed` and পাওনা is `lent`. Remaining is the original amount minus payments. Settled rows stay out of the person totals. A due date before today, with money still unpaid, is overdue.
+- Linking an account is off unless the user turns it on, and only when the debt is created. Borrowed money is income and lent money is an expense, both in অন্যান্য. Paying back reverses that. Later edits do not rewrite those entries. Deleting a debt or payment leaves the account entries in place.
+

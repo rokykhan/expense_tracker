@@ -11,6 +11,8 @@ const LINKS = [
   { label: copy.allEntries, path: '/transactions' },
   { label: copy.quickEntries, path: '/quick-entries' },
   { label: copy.recurringTitle, path: '/recurring' },
+  { label: copy.savingsTitle, path: '/savings' },
+  { label: copy.debtsTitle, path: '/debts' },
   { label: copy.accountsTitle, path: '/accounts' },
   { label: copy.categoriesTitle, path: '/categories' },
   { label: copy.profileTitle, path: '/settings' },
