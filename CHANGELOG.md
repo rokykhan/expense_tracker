@@ -1,5 +1,11 @@
 # Changelog
 
+## Phase 4
+
+- Reports can show a category pie and a daily bar chart. The amounts match the month totals.
+- A yearly view lists all twelve months and charts the months that had spending.
+- A custom view filters by dates, accounts, categories, and kinds, and exports those rows as CSV.
+
 ## Phase 3
 
 - The budget tab shows an overall monthly budget and one budget per expense category, with yellow and red progress.

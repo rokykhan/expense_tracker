@@ -1,5 +1,5 @@
-import { MonthlyReportScreen } from '@/features/reports/components/monthly-report-screen';
+import { ReportsScreen } from '@/features/reports/components/reports-screen';
 
 export default function ReportsRoute() {
-  return <MonthlyReportScreen />;
+  return <ReportsScreen />;
 }

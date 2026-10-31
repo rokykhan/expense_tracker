@@ -1,47 +1,40 @@
 import { useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 
-import { EmptyScreen } from '@/components/empty-screen';
-import { Chip, ChipRow, FormMessage, PrimaryButton } from '@/components/form';
+import { Chip, ChipRow } from '@/components/form';
 import { MoneyText } from '@/components/money-text';
 import { MonthSwitcher } from '@/components/month-switcher';
-import { Screen } from '@/components/screen';
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
 import { copy } from '@/constants/copy';
 import { Spacing } from '@/constants/theme';
-import { useLedger } from '@/features/transactions/data/use-ledger';
-import { categoryBreakdown, monthTotals } from '@/features/transactions/domain/ledger';
+import type { CategoryRecord } from '@/features/categories/domain/types';
+import { AmountBars, CategoryPie } from '@/features/reports/components/report-charts';
+import { dailySeries, monthlySlices, withPercents } from '@/features/reports/domain/summary';
+import type { TransactionRecord } from '@/features/transactions/domain/types';
+import { monthTotals } from '@/features/transactions/domain/ledger';
 import { useTheme } from '@/hooks/use-theme';
 import { useSettings } from '@/providers/settings-provider';
 import { toBanglaDigits } from '@/utils/bangla-digits';
 import { currentDhakaMonth } from '@/utils/date';
 
-export function MonthlyReportScreen() {
-  const ledger = useLedger();
+export function MonthlyReport({
+  transactions,
+  categories,
+}: {
+  transactions: TransactionRecord[];
+  categories: CategoryRecord[];
+}) {
   const theme = useTheme();
   const { banglaDigits } = useSettings();
   const [month, setMonth] = useState(() => currentDhakaMonth());
   const [kind, setKind] = useState<'expense' | 'income'>('expense');
-
-  if (ledger.loading) {
-    return <EmptyScreen title={copy.tabs.reports} message={copy.loading} />;
-  }
-
-  if (ledger.error) {
-    return (
-      <Screen tabBar>
-        <FormMessage message={ledger.error} />
-        <PrimaryButton label={copy.retry} onPress={ledger.retry} />
-      </Screen>
-    );
-  }
-
-  const totals = monthTotals(ledger.transactions, month.year, month.month);
-  const shares = categoryBreakdown(ledger.transactions, month.year, month.month, kind);
+  const totals = monthTotals(transactions, month.year, month.month);
+  const slices = withPercents(monthlySlices(transactions, month.year, month.month, kind));
+  const days = dailySeries(transactions, month.year, month.month, kind);
 
   return (
-    <Screen tabBar>
+    <>
       <MonthSwitcher year={month.year} month={month.month} onChange={setMonth} />
       <ThemedView type="backgroundElement" style={styles.card}>
         <View style={styles.line}>
@@ -57,39 +50,56 @@ export function MonthlyReportScreen() {
         <Chip label={copy.expense} selected={kind === 'expense'} onPress={() => setKind('expense')} />
         <Chip label={copy.income} selected={kind === 'income'} onPress={() => setKind('income')} />
       </ChipRow>
-      {shares.length === 0 ? (
+      {slices.length === 0 ? (
         <ThemedText themeColor="textSecondary">
           {kind === 'expense' ? copy.reportExpenseEmpty : copy.reportIncomeEmpty}
         </ThemedText>
       ) : (
-        shares.map((share) => {
-          const category = ledger.categories.find((item) => item.id === share.categoryId);
-          const percentText = banglaDigits ? toBanglaDigits(String(share.percent)) : String(share.percent);
-          return (
-            <View key={share.categoryId} style={styles.share}>
-              <View style={styles.line}>
-                <ThemedText>{category?.name ?? copy.unknown}</ThemedText>
-                <ThemedText type="small">
-                  {percentText}%
-                </ThemedText>
-              </View>
-              <View style={[styles.track, { backgroundColor: theme.backgroundElement }]}>
-                <View
-                  style={[
-                    styles.bar,
-                    {
-                      width: `${share.percent}%`,
-                      backgroundColor: category?.color ?? theme.accent,
-                    },
-                  ]}
+        <>
+          <CategoryPie
+            slices={slices.map((slice) => ({
+              value: slice.amount,
+              color: categories.find((item) => item.id === slice.categoryId)?.color ?? theme.textSecondary,
+            }))}
+          />
+          <AmountBars
+            points={days.map((point) => ({
+              value: point.amount,
+              label: banglaDigits ? toBanglaDigits(String(point.key)) : String(point.key),
+              color: theme.accent,
+            }))}
+          />
+          {slices.map((slice) => {
+            const category = categories.find((item) => item.id === slice.categoryId);
+            const percentText = banglaDigits ? toBanglaDigits(String(slice.percent)) : String(slice.percent);
+            return (
+              <View key={slice.categoryId ?? 'none'} style={styles.share}>
+                <View style={styles.line}>
+                  <ThemedText>{category?.name ?? copy.unknown}</ThemedText>
+                  <ThemedText type="small">{percentText}%</ThemedText>
+                </View>
+                <View style={[styles.track, { backgroundColor: theme.backgroundElement }]}>
+                  <View
+                    style={[
+                      styles.bar,
+                      {
+                        width: `${slice.percent}%`,
+                        backgroundColor: category?.color ?? theme.accent,
+                      },
+                    ]}
+                  />
+                </View>
+                <MoneyText
+                  paisa={kind === 'expense' ? -slice.amount : slice.amount}
+                  type="small"
+                  themeColor="textSecondary"
                 />
               </View>
-              <MoneyText paisa={kind === 'expense' ? -share.amount : share.amount} type="small" themeColor="textSecondary" />
-            </View>
-          );
-        })
+            );
+          })}
+        </>
       )}
-    </Screen>
+    </>
   );
 }
 

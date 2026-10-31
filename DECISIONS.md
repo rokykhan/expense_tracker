@@ -41,3 +41,10 @@
 - দেনা is `borrowed` and পাওনা is `lent`. Remaining is the original amount minus payments. Settled rows stay out of the person totals. A due date before today, with money still unpaid, is overdue.
 - Linking an account is off unless the user turns it on, and only when the debt is created. Borrowed money is income and lent money is an expense, both in অন্যান্য. Paying back reverses that. Later edits do not rewrite those entries. Deleting a debt or payment leaves the account entries in place.
 
+## Phase 4
+
+- Chart values are integer paisa. The axis labels show whole taka. A day or month with no amount is left off the bar chart, and the bars that remain still add up to the same total as the table.
+- An empty custom filter means every account, category, and kind. A range whose end is before its start shows no rows.
+- The CSV stores integer paisa, with Bangla headers and a byte-order mark. On Android and iOS the file is written to the cache and shared. On the web the file system API throws, and a local file cannot be shared, so the browser downloads the CSV instead.
+- `expo-linear-gradient` is installed because the bar chart loads it as soon as the chart package is imported.
+
