@@ -1,6 +1,5 @@
-import { EmptyScreen } from '@/components/empty-screen';
-import { copy } from '@/constants/copy';
+import { MonthlyReportScreen } from '@/features/reports/components/monthly-report-screen';
 
-export default function ReportsScreen() {
-  return <EmptyScreen title={copy.tabs.reports} message={copy.reportsEmpty} />;
+export default function ReportsRoute() {
+  return <MonthlyReportScreen />;
 }

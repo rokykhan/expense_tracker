@@ -1,0 +1,30 @@
+export const COLOR_CHOICES = [
+  '#1F4D6E',
+  '#C46B3A',
+  '#2F6F8F',
+  '#3E6B5A',
+  '#6B5B4B',
+  '#5C4E86',
+  '#8E4A56',
+  '#8A6232',
+] as const;
+
+export const ICON_CHOICES = [
+  { name: 'banknote', label: 'নগদ' },
+  { name: 'building.columns', label: 'ব্যাংক' },
+  { name: 'creditcard', label: 'কার্ড' },
+  { name: 'wallet.pass', label: 'ওয়ালেট' },
+  { name: 'fork.knife', label: 'খাবার' },
+  { name: 'car', label: 'যাতায়াত' },
+  { name: 'house', label: 'বাসা' },
+  { name: 'doc.text', label: 'বিল' },
+  { name: 'phone', label: 'ফোন' },
+  { name: 'cross.case', label: 'চিকিৎসা' },
+  { name: 'book', label: 'শিক্ষা' },
+  { name: 'bag', label: 'কেনাকাটা' },
+  { name: 'film', label: 'বিনোদন' },
+  { name: 'briefcase', label: 'বেতন' },
+  { name: 'storefront', label: 'ব্যবসা' },
+  { name: 'gift', label: 'উপহার' },
+  { name: 'square.grid.2x2', label: 'অন্যান্য' },
+] as const;

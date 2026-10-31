@@ -7,6 +7,7 @@ import { ThemedView } from '@/components/themed-view';
 import { copy } from '@/constants/copy';
 import { Spacing } from '@/constants/theme';
 import { migrate } from '@/db/migrate';
+import { SettingsProvider } from '@/providers/settings-provider';
 
 type DatabaseProviderProps = {
   children: ReactNode;
@@ -52,7 +53,7 @@ export function DatabaseProvider({ children }: DatabaseProviderProps) {
           </ThemedView>
         }>
         <SQLiteProvider databaseName="hisabkhata.db" onInit={migrate} useSuspense>
-          {children}
+          <SettingsProvider>{children}</SettingsProvider>
         </SQLiteProvider>
       </Suspense>
     </DatabaseErrorBoundary>

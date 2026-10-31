@@ -5,7 +5,7 @@ import { useEffect } from 'react';
 
 import { EmptyScreen } from '@/components/empty-screen';
 import { copy } from '@/constants/copy';
-import { FontFamily } from '@/constants/theme';
+import { Colors, FontFamily } from '@/constants/theme';
 import { useColorScheme } from '@/hooks/use-color-scheme';
 import { DatabaseProvider } from '@/providers/database-provider';
 
@@ -36,7 +36,18 @@ export default function RootLayout() {
         <EmptyScreen title={copy.appName} message={copy.fontError} />
       ) : (
         <DatabaseProvider>
-          <Stack>
+          <Stack
+            screenOptions={{
+              headerTitleStyle: { fontFamily: FontFamily.medium },
+              headerTintColor: colorScheme === 'dark' ? Colors.dark.accent : Colors.light.accent,
+              headerStyle: {
+                backgroundColor: colorScheme === 'dark' ? Colors.dark.background : Colors.light.background,
+              },
+              headerShadowVisible: false,
+              contentStyle: {
+                backgroundColor: colorScheme === 'dark' ? Colors.dark.background : Colors.light.background,
+              },
+            }}>
             <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
           </Stack>
         </DatabaseProvider>

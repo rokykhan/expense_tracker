@@ -1,6 +1,5 @@
-import { EmptyScreen } from '@/components/empty-screen';
-import { copy } from '@/constants/copy';
+import { MoreScreen } from '@/features/settings/components/more-screen';
 
-export default function MoreScreen() {
-  return <EmptyScreen title={copy.tabs.more} message={copy.moreEmpty} />;
+export default function MoreRoute() {
+  return <MoreScreen />;
 }

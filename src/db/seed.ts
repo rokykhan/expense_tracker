@@ -1,9 +1,10 @@
+import type { AccountType, CategoryKind } from '@/db/types';
+
 export const SEED_TIMESTAMP = '2026-01-01T00:00:00.000Z';
 
 export const DEFAULT_ACCENT = '#1F4D6E';
 
-export type AccountType = 'cash' | 'bank' | 'mobile_wallet' | 'other';
-export type CategoryKind = 'income' | 'expense';
+export type { AccountType, CategoryKind };
 
 export type SeedAccount = {
   name: string;
@@ -59,4 +60,6 @@ export const seedSettings: SeedSetting[] = [
   { key: 'bangla_digits', value: '1' },
   { key: 'theme_mode', value: 'system' },
   { key: 'accent', value: DEFAULT_ACCENT },
+  { key: 'profile_name', value: '' },
+  { key: 'currency_symbol', value: '৳' },
 ];

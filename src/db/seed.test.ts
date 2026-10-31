@@ -35,6 +35,8 @@ describe('seed data', () => {
       { key: 'bangla_digits', value: '1' },
       { key: 'theme_mode', value: 'system' },
       { key: 'accent', value: '#1F4D6E' },
+      { key: 'profile_name', value: '' },
+      { key: 'currency_symbol', value: '৳' },
     ]);
   });
 });
