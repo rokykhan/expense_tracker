@@ -1,10 +1,16 @@
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { useColorScheme as useRNColorScheme } from 'react-native';
 
+import { resolveScheme } from '@/features/settings/domain/appearance';
+import { SettingsContext } from '@/providers/settings-context';
+
 /**
- * To support static rendering, this value needs to be re-calculated on the client side for web
+ * To support static rendering, the system theme is re-calculated on the client.
+ * An explicit light or dark choice applies as soon as settings have loaded.
  */
 export function useColorScheme() {
+  const settings = useContext(SettingsContext);
+  const system = useRNColorScheme();
   const [hasHydrated, setHasHydrated] = useState(false);
 
   useEffect(() => {
@@ -13,11 +19,12 @@ export function useColorScheme() {
     setHasHydrated(true);
   }, []);
 
-  const colorScheme = useRNColorScheme();
-
-  if (hasHydrated) {
-    return colorScheme;
+  const mode = settings?.themeMode ?? 'system';
+  if (mode === 'light' || mode === 'dark') {
+    return mode;
   }
-
-  return 'light';
+  if (!hasHydrated) {
+    return 'light';
+  }
+  return resolveScheme('system', system);
 }

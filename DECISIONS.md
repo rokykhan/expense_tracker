@@ -55,3 +55,13 @@
 - A reminder is a date trigger with `delivery: 'bestEffort'`. The app does not declare an exact-alarm permission. On Android the channel is created before the notification permission is requested. Finishing or deleting a task cancels that notification, and a time that has already passed is not scheduled.
 - The web build cannot schedule a local notification. Saving a reminder there shows that it can be set on the phone, and the task is left unchanged.
 
+## Phase 6
+
+- The PIN is stored as a SHA-256 hash with a random salt. The raw PIN is never written. On Android and iOS the hash is in secure storage. The web build has no secure-storage implementation, so the same hash is kept in local storage.
+- Two wrong attempts have no wait. The third waits 15 seconds, and the fifth waits 60 seconds. A correct PIN clears the count.
+- Face or fingerprint unlock is optional and does not replace the PIN. The system passcode is not offered as a fallback. Face ID uses the usage string in `app.json`.
+- Hiding the recents preview turns on screen-capture protection. The web page cannot do that, so the switch is saved and applied only on a phone.
+- Dark mode keeps the existing black background and white text. Each accent preset has a lighter pair for dark mode, stored as the light hex in `app_settings`.
+- The widget's month figure is this month's income minus expense, the same number Home calls সঞ্চয়. Today's figure is today's expenses. On iOS the add button opens `hisabkhata://transaction/new`. On Android the button notifies the app with the target `add`, which opens the new-entry screen while the app process is running. The widget itself needs a development build, so the browser cannot show it.
+- While the lock is up, the current screen stays mounted but hidden, so unlocking returns to the same place. The visible page and the accessibility tree contain only the PIN pad.
+

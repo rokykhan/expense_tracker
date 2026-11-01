@@ -1,5 +1,11 @@
 # Changelog
 
+## Phase 6
+
+- The app can lock with a 4–6 digit PIN. A wrong PIN waits longer after repeated tries. Fingerprint or face unlock is optional, and the PIN still works without it.
+- The recents preview can be hidden. Light, dark, and system themes are available, with eight accent colors.
+- A home screen widget shows today's spending and this month's net, with a button that opens a new entry. It needs a development build.
+
 ## Phase 5
 
 - Notes can be added, edited, deleted, pinned, and searched.

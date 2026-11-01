@@ -9,7 +9,10 @@
     "userInterfaceStyle": "automatic",
     "ios": {
       "icon": "./assets/expo.icon",
-      "bundleIdentifier": "com.example.hisabkhata"
+      "bundleIdentifier": "com.example.hisabkhata",
+      "infoPlist": {
+        "NSFaceIDUsageDescription": "হিসাবখাতা লক খুলতে ফেস আইডি ব্যবহার করা হয়।"
+      }
     },
     "android": {
       "package": "com.example.hisabkhata",
@@ -50,7 +53,33 @@
         {
           "enableRemoteNotifications": false
         }
-      ]
+      ],
+      [
+        "expo-widgets",
+        {
+          "bundleIdentifier": "com.example.hisabkhata.widgets",
+          "groupIdentifier": "group.com.example.hisabkhata",
+          "enablePushNotifications": false,
+          "enableAndroid": true,
+          "widgets": [
+            {
+              "name": "Summary",
+              "displayName": "হিসাবখাতা",
+              "description": "আজকের ব্যয় এবং এই মাসের সঞ্চয়",
+              "ios": {
+                "supportedFamilies": ["systemSmall", "systemMedium"],
+                "initialLayout": "./src/widgets/summary.ios.tsx"
+              },
+              "android": {
+                "targetCellWidth": 4,
+                "targetCellHeight": 2,
+                "initialLayout": "./src/widgets/summary.android.tsx"
+              }
+            }
+          ]
+        }
+      ],
+      "expo-secure-store"
     ],
     "experiments": {
       "typedRoutes": true,

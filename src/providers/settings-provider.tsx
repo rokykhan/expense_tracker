@@ -1,31 +1,36 @@
 import { useSQLiteContext } from 'expo-sqlite';
-import { createContext, useCallback, useContext, useEffect, useMemo, useState, type ReactNode } from 'react';
+import { useCallback, useEffect, useMemo, useState, type ReactNode } from 'react';
 import { Platform, Pressable, StyleSheet } from 'react-native';
 
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
 import { copy } from '@/constants/copy';
 import { Spacing } from '@/constants/theme';
+import { DEFAULT_ACCENT } from '@/db/seed';
 import {
   DEFAULT_CURRENCY_SYMBOL,
+  SETTING_ACCENT,
+  SETTING_BIOMETRICS,
   SETTING_CURRENCY_SYMBOL,
+  SETTING_HIDE_PREVIEW,
   SETTING_PROFILE_NAME,
+  SETTING_THEME_MODE,
   readSettings,
   writeSetting,
   type AppSettings,
 } from '@/features/settings/data/settings';
+import { knownAccent, type ThemeMode } from '@/features/settings/domain/appearance';
+import { SettingsContext, type SettingsContextValue } from '@/providers/settings-context';
 
 const DEFAULT_SETTINGS: AppSettings = {
   banglaDigits: true,
   profileName: '',
   currencySymbol: DEFAULT_CURRENCY_SYMBOL,
+  themeMode: 'system',
+  accent: DEFAULT_ACCENT,
+  hidePreview: false,
+  biometrics: false,
 };
-
-type SettingsContextValue = AppSettings & {
-  saveProfile: (profileName: string, currencySymbol: string) => Promise<void>;
-};
-
-const SettingsContext = createContext<SettingsContextValue | null>(null);
 
 export function SettingsProvider({ children }: { children: ReactNode }) {
   const db = useSQLiteContext();
@@ -62,12 +67,49 @@ export function SettingsProvider({ children }: { children: ReactNode }) {
     [db],
   );
 
-  const value = useMemo(
+  const saveThemeMode = useCallback(
+    async (mode: ThemeMode) => {
+      await writeSetting(db, SETTING_THEME_MODE, mode);
+      setSettings((current) => ({ ...current, themeMode: mode }));
+    },
+    [db],
+  );
+
+  const saveAccent = useCallback(
+    async (accent: string) => {
+      const next = knownAccent(accent);
+      await writeSetting(db, SETTING_ACCENT, next);
+      setSettings((current) => ({ ...current, accent: next }));
+    },
+    [db],
+  );
+
+  const saveHidePreview = useCallback(
+    async (hidden: boolean) => {
+      await writeSetting(db, SETTING_HIDE_PREVIEW, hidden ? '1' : '0');
+      setSettings((current) => ({ ...current, hidePreview: hidden }));
+    },
+    [db],
+  );
+
+  const saveBiometrics = useCallback(
+    async (enabled: boolean) => {
+      await writeSetting(db, SETTING_BIOMETRICS, enabled ? '1' : '0');
+      setSettings((current) => ({ ...current, biometrics: enabled }));
+    },
+    [db],
+  );
+
+  const value = useMemo<SettingsContextValue>(
     () => ({
       ...settings,
       saveProfile,
+      saveThemeMode,
+      saveAccent,
+      saveHidePreview,
+      saveBiometrics,
     }),
-    [settings, saveProfile],
+    [settings, saveProfile, saveThemeMode, saveAccent, saveHidePreview, saveBiometrics],
   );
 
   if (error) {
@@ -91,13 +133,7 @@ export function SettingsProvider({ children }: { children: ReactNode }) {
   return <SettingsContext.Provider value={value}>{children}</SettingsContext.Provider>;
 }
 
-export function useSettings() {
-  const value = useContext(SettingsContext);
-  if (!value) {
-    throw new Error('SettingsProvider is missing.');
-  }
-  return value;
-}
+export { useSettings } from '@/providers/settings-context';
 
 const styles = StyleSheet.create({
   center: {
