@@ -1,5 +1,11 @@
 # Changelog
 
+## Phase 5
+
+- Notes can be added, edited, deleted, pinned, and searched.
+- Tasks have a due day, a reminder, and filters for today, upcoming, and done.
+- Finishing or deleting a task cancels its reminder. The reminder uses a normal date trigger and does not ask for an exact alarm.
+
 ## Phase 4
 
 - Reports can show a category pie and a daily bar chart. The amounts match the month totals.

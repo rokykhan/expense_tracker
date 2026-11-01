@@ -48,3 +48,10 @@
 - The CSV stores integer paisa, with Bangla headers and a byte-order mark. On Android and iOS the file is written to the cache and shared. On the web the file system API throws, and a local file cannot be shared, so the browser downloads the CSV instead.
 - `expo-linear-gradient` is installed because the bar chart loads it as soon as the chart package is imported.
 
+## Phase 5
+
+- A note search matches the title and the body. Pinned notes stay above the others.
+- Today includes open tasks whose due day is today or earlier, so an overdue task is not hidden. Upcoming is everything else that is still open, including a task with no due day.
+- A reminder is a date trigger with `delivery: 'bestEffort'`. The app does not declare an exact-alarm permission. On Android the channel is created before the notification permission is requested. Finishing or deleting a task cancels that notification, and a time that has already passed is not scheduled.
+- The web build cannot schedule a local notification. Saving a reminder there shows that it can be set on the phone, and the task is left unchanged.
+

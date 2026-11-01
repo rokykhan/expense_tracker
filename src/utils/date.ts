@@ -24,6 +24,20 @@ export function dhakaDateToIso(year: number, month: number, day: number): string
   return new Date(utcMs).toISOString();
 }
 
+export function dhakaDateTimeToIso(year: number, month: number, day: number, hour: number, minute: number): string {
+  const utcMs = Date.UTC(year, month - 1, day, hour, minute) - 6 * 60 * 60 * 1000;
+  return new Date(utcMs).toISOString();
+}
+
+export function dhakaClock(isoUtc: string): { hour: number; minute: number } {
+  const date = new Date(isoUtc);
+  if (Number.isNaN(date.getTime())) {
+    throw new Error('Invalid date.');
+  }
+  const shifted = new Date(date.getTime() + 6 * 60 * 60 * 1000);
+  return { hour: shifted.getUTCHours(), minute: shifted.getUTCMinutes() };
+}
+
 export function dhakaMonthBounds(year: number, month: number): { startMs: number; endMs: number } {
   const nextYear = month === 12 ? year + 1 : year;
   const nextMonth = month === 12 ? 1 : month + 1;

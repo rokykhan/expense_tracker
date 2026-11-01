@@ -1,4 +1,4 @@
-import { dhakaDateToIso, dhakaMonthBounds, formatDateDhaka, shiftDay, shiftMonth } from '@/utils/date';
+import { dhakaClock, dhakaDateTimeToIso, dhakaDateToIso, dhakaMonthBounds, formatDateDhaka, shiftDay, shiftMonth } from '@/utils/date';
 
 describe('formatDateDhaka', () => {
   it('shows the Asia/Dhaka calendar day', () => {
@@ -18,6 +18,8 @@ describe('formatDateDhaka', () => {
 describe('Dhaka month bounds', () => {
   it('starts a calendar day at Dhaka midnight', () => {
     expect(dhakaDateToIso(2026, 1, 1)).toBe('2025-12-31T18:00:00.000Z');
+    expect(dhakaDateTimeToIso(2026, 1, 1, 9, 30)).toBe('2026-01-01T03:30:00.000Z');
+    expect(dhakaClock('2026-01-01T03:30:00.000Z')).toEqual({ hour: 9, minute: 30 });
     expect(dhakaMonthBounds(2026, 1).endMs).toBe(Date.parse(dhakaDateToIso(2026, 2, 1)));
   });
 

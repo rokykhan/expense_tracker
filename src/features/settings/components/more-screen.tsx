@@ -13,6 +13,8 @@ const LINKS = [
   { label: copy.recurringTitle, path: '/recurring' },
   { label: copy.savingsTitle, path: '/savings' },
   { label: copy.debtsTitle, path: '/debts' },
+  { label: copy.notesTitle, path: '/notes' },
+  { label: copy.tasksTitle, path: '/tasks' },
   { label: copy.accountsTitle, path: '/accounts' },
   { label: copy.categoriesTitle, path: '/categories' },
   { label: copy.profileTitle, path: '/settings' },
